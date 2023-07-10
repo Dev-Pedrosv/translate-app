@@ -4,7 +4,7 @@ import LoadingSpinner from "./LoadingSpinner";
 
 type ButtonProps = {
   children: ReactNode;
-  onClick: () => void;
+  onClick?: () => void;
   className?: string;
   isLoading?: boolean;
 };
@@ -16,7 +16,7 @@ export default function Button({
   isLoading,
 }: ButtonProps) {
   const _className = twMerge(
-    "px-12 py-3 bg-blue-600 rounded-xl mt-10 hover:bg-blue-700 transition-all text-white w-full max-w-72",
+    "px-12 py-3 bg-blue-600 rounded-xl mt-10 hover:bg-blue-700 transition-all text-white w-full max-w-72 flex items-center justify-center",
     className
   );
 
