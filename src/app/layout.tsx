@@ -20,8 +20,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={poppins.className}>
-        <Header />
-        {children}
+        <main className="bg-bgColor w-full h-screen overflow-hidden flex justify-center p-4">
+          <div className="max-w-[375px] w-full">
+            <Header />
+            {children}
+          </div>
+        </main>
       </body>
     </html>
   );
