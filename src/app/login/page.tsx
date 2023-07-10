@@ -29,7 +29,7 @@ function Login() {
 
       <Button
         onClick={handleLoginClick}
-        className="flex items-center gap-4 justify-center "
+        className="gap-4"
         isLoading={isLoading}
       >
         <BsGoogle />
