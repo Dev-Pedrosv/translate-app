@@ -1,11 +1,44 @@
 "use client";
 
-import React from "react";
-import Button from "./Button";
-import { BsGoogle } from "react-icons/bs";
+import React, { useEffect } from "react";
+import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { FiLogOut } from "react-icons/fi";
+import Image from "next/image";
 
 function Header() {
-  return <h1 className="text-slate-50 text-2xl font-bold">Translate</h1>;
+  const { status, data } = useSession();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [data, router, status]);
+
+  return (
+    <div className="flex justify-between border-b border-slate-400 pb-4 mb-10">
+      <h1 className="text-white text-2xl font-bold">Translate</h1>
+      {status === "authenticated" && data.user && (
+        <div className="flex gap-4 items-center ">
+          <Image
+            className="rounded-full shadow-md"
+            height={35}
+            width={35}
+            alt={data?.user!.name!}
+            src={data?.user!.image!}
+          />
+
+          <button
+            onClick={() => signOut()}
+            className="hover:opacity-80 transition-all"
+          >
+            <FiLogOut className="text-xl text-white" />
+          </button>
+        </div>
+      )}
+    </div>
+  );
 }
 
 export default Header;
