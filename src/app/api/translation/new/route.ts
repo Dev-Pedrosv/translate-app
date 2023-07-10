@@ -1,13 +1,17 @@
 import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth";
 import { NextResponse } from "next/server";
+import { authOptions } from "../../auth/[...nextauth]/route";
 
 export async function POST(request: Request) {
   const req = await request.json();
+  const userSession = await getServerSession(authOptions);
 
   const { word, translation, imageUrl } = req;
 
   const newWord = await prisma.translateWord.create({
     data: {
+      userId: (userSession?.user as any)?.id,
       word,
       translation,
       imageUrl,
