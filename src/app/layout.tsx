@@ -24,7 +24,7 @@ export default function RootLayout({
         <NextAuthProvider>
           <ToastProvider>
             <main className="bg-bgColor w-full h-screen overflow-hidden flex justify-center p-4">
-              <div className="max-w-[375px] w-full">
+              <div className="max-w-[375px] w-full h-screen">
                 <Header />
                 {children}
               </div>
