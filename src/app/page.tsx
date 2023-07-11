@@ -1,6 +1,7 @@
 "use client";
 
 import Card from "@/components/Card";
+import { pronounceWord } from "@/lib/pronounceWord";
 import { TranslateWord } from "@prisma/client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -28,7 +29,7 @@ export default function Home() {
   const hasWordList = wordsList && wordsList?.length > 0;
 
   return (
-    <div className="flex flex-col h-[80%] justify-between">
+    <div className="flex flex-col h-[82%] justify-between">
       <div>
         <Link
           href="/word-list"
@@ -51,7 +52,7 @@ export default function Home() {
                 <label>Troca automática: 30s</label>
               </div>
 
-              <button>
+              <button onClick={() => pronounceWord(wordsList[0].word)}>
                 <BsFillVolumeUpFill className="text-slate-50 text-2xl hover:opacity-80 transition-all" />
               </button>
             </div>

@@ -12,6 +12,7 @@ interface CardProps {
 
 function Card({ item }: CardProps) {
   const [showWord, setShowWord] = useState(false);
+  const maskWord = item.translation.replace(/./g, "*");
 
   return (
     <div className="flex w-full">
@@ -19,18 +20,19 @@ function Card({ item }: CardProps) {
         <div>
           {item.imageUrl && (
             <Image
-              width={120}
-              height={120}
+              width={220}
+              height={220}
               alt={item.word}
               src={item.imageUrl}
+              className="rounded-xl"
             />
           )}
           <div className="mt-4">
             <p className="text-center text-slate-50 text-lg font-semibold">
-              Good morning
+              {item.word}
             </p>
             <p className="text-center text-gray-400 text-lg font-semibold ">
-              {showWord ? "word" : "*** ***"}
+              {showWord ? item.translation : maskWord}
             </p>
           </div>
         </div>
