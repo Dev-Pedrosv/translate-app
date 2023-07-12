@@ -2,15 +2,17 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { isValidUrl } from "@/lib/url";
-import { AiOutlineClose } from "react-icons/ai";
-import { Controller, useForm } from "react-hook-form";
-import { TranslateWord, TranslateWordPayload } from "@prisma/client";
 import { useRouter } from "next/navigation";
-import Input from "@/components/Input";
 import { toast } from "react-toastify";
-import Button from "@/components/Button";
+import { Controller, useForm } from "react-hook-form";
+
 import { createWord } from "@/services/word";
+import { isValidUrl } from "@/lib/url";
+import { TranslateWord } from "@prisma/client";
+
+import { AiOutlineClose } from "react-icons/ai";
+import Input from "@/components/Input";
+import Button from "@/components/Button";
 
 export default function NewWord() {
   const router = useRouter();
