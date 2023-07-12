@@ -5,18 +5,18 @@ import Image from "next/image";
 import { isValidUrl } from "@/lib/url";
 import { AiOutlineClose } from "react-icons/ai";
 import { Controller, useForm } from "react-hook-form";
-import { TranslateWord } from "@prisma/client";
+import { TranslateWord, TranslateWordPayload } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import Input from "@/components/Input";
 import { toast } from "react-toastify";
 import Button from "@/components/Button";
+import { createWord } from "@/services/word";
 
-export default function NewWord(props: any) {
+export default function NewWord() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
-    register,
     handleSubmit,
     formState: { errors },
     watch,
@@ -27,20 +27,11 @@ export default function NewWord(props: any) {
     router.push("/word-list");
   };
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: TranslateWord) => {
     try {
       setIsLoading(true);
-      await fetch("/api/translation/new", {
-        body: Buffer.from(
-          JSON.stringify({
-            word: data.word,
-            translation: data.translation,
-            imageUrl: data?.imageUrl,
-          })
-        ),
-        method: "POST",
-      });
 
+      await createWord(data);
       toast.success("Nova palavra cadastrada com sucesso!", {
         position: "bottom-center",
       });

@@ -12,15 +12,12 @@ export default function WordListScreen() {
 
   useEffect(() => {
     async function fetchWords() {
-      const list = await fetch("api/translation").then((res) => res.json());
-
+      const list = await fetch("api/word").then((res) => res.json());
       setWordList(list);
     }
 
     fetchWords();
   }, []);
-
-  console.log(wordsList);
 
   return (
     <div className="w-full relative">
@@ -44,7 +41,6 @@ export default function WordListScreen() {
             translateWord={item}
             key={item.id}
             handleDelete={() => console.log(item.id)}
-            handleEdit={() => console.log(item)}
           />
         ))}
       </div>
