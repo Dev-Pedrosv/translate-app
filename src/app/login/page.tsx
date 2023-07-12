@@ -1,9 +1,11 @@
 "use client";
-import Button from "@/components/Button";
 import React, { useEffect, useState } from "react";
-import { BsGoogle } from "react-icons/bs";
 import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+
+import Button from "@/components/Button";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import { BsGoogle } from "react-icons/bs";
 
 function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -24,7 +26,9 @@ function Login() {
   return (
     <div className="flex flex-1 flex-col items-center justify-center h-full p-5">
       <p className="text-white text-center">
-        Efetue login para acessar sua lista de palavras
+        {status === "loading"
+          ? "Efetuando login..."
+          : "Efetue login para acessar sua lista de palavras"}
       </p>
 
       <Button
@@ -32,8 +36,14 @@ function Login() {
         className="gap-4"
         isLoading={isLoading}
       >
-        <BsGoogle />
-        Login com Google
+        {status === "loading" ? (
+          <LoadingSpinner />
+        ) : (
+          <>
+            <BsGoogle />
+            Login com Google
+          </>
+        )}
       </Button>
     </div>
   );

@@ -1,24 +1,30 @@
 "use client";
 
-import Card from "@/components/Card";
-import Modal from "@/components/Modal";
+import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
+
 import { pronounceWord } from "@/lib/pronounceWord";
 import { deleteWord, getWords } from "@/services/word";
 import { TranslateWord } from "@prisma/client";
-import Link from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { toast } from "react-toastify";
+
 import {
   AiOutlineArrowLeft,
   AiOutlineArrowRight,
   AiOutlinePlus,
 } from "react-icons/ai";
 import { BsFillVolumeUpFill } from "react-icons/bs";
-import { toast } from "react-toastify";
+
+import Button from "@/components/Button";
+import Card from "@/components/Card";
+import Loading from "@/components/Loading";
+import Modal from "@/components/Modal";
 
 export default function Home() {
   const [wordsList, setWordList] = useState<TranslateWord[] | undefined>();
   const [indexWord, setIndexWord] = useState(0);
   const [automaticChange, setAutomaticChange] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const interval = 1000 * 30; //30seg
 
   const hasWordList = wordsList && wordsList?.length > 0;
@@ -39,9 +45,19 @@ export default function Home() {
   };
 
   async function fetchWords() {
-    const list = await getWords();
-    setWordList(list);
+    try {
+      setIsLoading(true);
+      const list = await getWords();
+      setWordList(list);
+    } catch (err) {
+      toast.error("Erro ao carregar a lista de palavras, tente novamente!", {
+        position: "bottom-center",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }
+
   useEffect(() => {
     fetchWords();
   }, []);
@@ -67,16 +83,19 @@ export default function Home() {
   const handleDeleteWord = async () => {
     try {
       if (wordsList) {
+        setIsLoading(true);
         await deleteWord(wordsList[indexWord].id);
         fetchWords();
-        toast.success("Palavra deletada com sucesso !", {
+        toast.success("Card deletada com sucesso !", {
           position: "bottom-center",
         });
       }
     } catch (e) {
-      toast.error("Erro ao deletar a palavra, tente novamente ! ", {
+      toast.error("Erro ao deletar o Card, tente novamente ! ", {
         position: "bottom-center",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -96,29 +115,41 @@ export default function Home() {
         >
           Word list
         </Link>
-        {hasWordList ? (
-          <div className="mt-8">
-            <Card item={wordsList[indexWord]} handleDelete={handleOpenModal} />
+        {!isLoading &&
+          (hasWordList ? (
+            <div className="mt-8">
+              <Card
+                item={wordsList[indexWord]}
+                handleDelete={handleOpenModal}
+              />
 
-            <div className="flex items-center justify-between mt-4">
-              <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  className="toggle toggle-info "
-                  checked={automaticChange}
-                  onChange={() => setAutomaticChange(!automaticChange)}
-                />
-                <label>Troca automática: 30s</label>
+              <div className="flex items-center justify-between mt-4">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    className="toggle toggle-info "
+                    checked={automaticChange}
+                    onChange={() => setAutomaticChange(!automaticChange)}
+                  />
+                  <label>Troca automática: 30s</label>
+                </div>
+
+                <button onClick={() => pronounceWord(wordsList[0].word)}>
+                  <BsFillVolumeUpFill className="text-slate-50 text-2xl hover:opacity-80 transition-all" />
+                </button>
               </div>
-
-              <button onClick={() => pronounceWord(wordsList[0].word)}>
-                <BsFillVolumeUpFill className="text-slate-50 text-2xl hover:opacity-80 transition-all" />
-              </button>
             </div>
-          </div>
-        ) : (
-          <p>Sem palavras cadastradas </p>
-        )}
+          ) : (
+            <>
+              <p className="text-center mt-20">Sem palavras cadastradas </p>
+              <Link href="/new-word" className="flex items-end">
+                <Button className="gap-2">
+                  <AiOutlinePlus className="text-slate-50 text-2xl hover:opacity-80 transition-all" />
+                  Cadastrar nova palavra
+                </Button>
+              </Link>
+            </>
+          ))}
       </div>
 
       {hasWordList && (
@@ -146,6 +177,7 @@ export default function Home() {
       )}
 
       <Modal onConfirm={handleDeleteWord} />
+      <Loading isLoading={isLoading} />
     </div>
   );
 }
