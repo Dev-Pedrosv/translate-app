@@ -8,13 +8,11 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 
 interface WordListProps {
   translateWord?: TranslateWord;
-  handleEdit: () => void;
   handleDelete: () => void;
 }
 
 export default function WordList({
   translateWord,
-  handleEdit,
   handleDelete,
 }: WordListProps) {
   return (
@@ -24,9 +22,6 @@ export default function WordList({
         <p className=" text-gray-400">{translateWord?.translation}</p>
       </div>
       <div className="flex items-center gap-2 mb-4">
-        <button onClick={handleEdit}>
-          <MdOutlineModeEdit className="text-slate-500 text-xl hover:opacity-80 transition-all" />
-        </button>
         <button onClick={handleDelete}>
           <RiDeleteBin6Line className="text-red-300 text-xl hover:opacity-80 transition-all" />
         </button>

@@ -2,6 +2,7 @@
 
 import Card from "@/components/Card";
 import { pronounceWord } from "@/lib/pronounceWord";
+import { deleteWord, getWords } from "@/services/word";
 import { TranslateWord } from "@prisma/client";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
@@ -11,6 +12,7 @@ import {
   AiOutlinePlus,
 } from "react-icons/ai";
 import { BsFillVolumeUpFill } from "react-icons/bs";
+import { toast } from "react-toastify";
 
 export default function Home() {
   const [wordsList, setWordList] = useState<TranslateWord[] | undefined>();
@@ -35,12 +37,11 @@ export default function Home() {
     setIndexWord(indexWord - 1);
   };
 
+  async function fetchWords() {
+    const list = await getWords();
+    setWordList(list);
+  }
   useEffect(() => {
-    async function fetchWords() {
-      const list = await fetch("api/translation").then((res) => res.json());
-      setWordList(list);
-    }
-
     fetchWords();
   }, []);
 
@@ -62,6 +63,17 @@ export default function Home() {
     };
   }, [automaticChange, handleNextIndex, interval]);
 
+  const handleDeleteWord = async (wordId: string) => {
+    try {
+      await deleteWord(wordId);
+      fetchWords();
+    } catch (e) {
+      toast.error("Erro ao deletar a palavra, tente novamente ! ", {
+        position: "bottom-center",
+      });
+    }
+  };
+
   return (
     <div className="flex flex-col h-[82%] justify-between">
       <div>
@@ -73,7 +85,10 @@ export default function Home() {
         </Link>
         {hasWordList ? (
           <div className="mt-8">
-            <Card item={wordsList[indexWord]} />
+            <Card
+              item={wordsList[indexWord]}
+              handleDelete={(wordId: string) => handleDeleteWord(wordId)}
+            />
 
             <div className="flex items-center justify-between mt-4">
               <div className="flex items-center gap-2">
@@ -108,7 +123,7 @@ export default function Home() {
               <AiOutlineArrowLeft className="text-slate-50 text-2xl hover:opacity-80 transition-all" />
             </button>
 
-            <Link href="/form-word" className="flex items-end">
+            <Link href="/new-word" className="flex items-end">
               <button>
                 <AiOutlinePlus className="text-slate-50 text-2xl hover:opacity-80 transition-all" />
               </button>
