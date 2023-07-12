@@ -1,6 +1,7 @@
 "use client";
 
 import Card from "@/components/Card";
+import Modal from "@/components/Modal";
 import { pronounceWord } from "@/lib/pronounceWord";
 import { deleteWord, getWords } from "@/services/word";
 import { TranslateWord } from "@prisma/client";
@@ -63,14 +64,26 @@ export default function Home() {
     };
   }, [automaticChange, handleNextIndex, interval]);
 
-  const handleDeleteWord = async (wordId: string) => {
+  const handleDeleteWord = async () => {
     try {
-      await deleteWord(wordId);
-      fetchWords();
+      if (wordsList) {
+        await deleteWord(wordsList[indexWord].id);
+        fetchWords();
+        toast.success("Palavra deletada com sucesso !", {
+          position: "bottom-center",
+        });
+      }
     } catch (e) {
       toast.error("Erro ao deletar a palavra, tente novamente ! ", {
         position: "bottom-center",
       });
+    }
+  };
+
+  const handleOpenModal = () => {
+    if (window) {
+      const modal: any = document.getElementById("my_modal_1");
+      modal?.showModal();
     }
   };
 
@@ -85,10 +98,7 @@ export default function Home() {
         </Link>
         {hasWordList ? (
           <div className="mt-8">
-            <Card
-              item={wordsList[indexWord]}
-              handleDelete={(wordId: string) => handleDeleteWord(wordId)}
-            />
+            <Card item={wordsList[indexWord]} handleDelete={handleOpenModal} />
 
             <div className="flex items-center justify-between mt-4">
               <div className="flex items-center gap-2">
@@ -134,6 +144,8 @@ export default function Home() {
           </div>
         </div>
       )}
+
+      <Modal onConfirm={handleDeleteWord} />
     </div>
   );
 }

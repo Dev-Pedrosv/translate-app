@@ -6,18 +6,45 @@ import Link from "next/link";
 import { AiOutlinePlus } from "react-icons/ai";
 import { TranslateWord } from "@prisma/client";
 import WordList from "@/components/WordList";
+import { deleteWord, getWords } from "@/services/word";
+import { toast } from "react-toastify";
+import Modal from "@/components/Modal";
 
 export default function WordListScreen() {
   const [wordsList, setWordList] = useState<TranslateWord[] | undefined>();
+  const [wordId, setWordId] = useState("");
+
+  async function fetchWords() {
+    const list = await getWords();
+    setWordList(list);
+  }
 
   useEffect(() => {
-    async function fetchWords() {
-      const list = await fetch("api/word").then((res) => res.json());
-      setWordList(list);
-    }
-
     fetchWords();
   }, []);
+
+  const handleDeleteWord = async () => {
+    try {
+      await deleteWord(wordId);
+      setWordId("");
+      fetchWords();
+      toast.success("Palavra deletada com sucesso !", {
+        position: "bottom-center",
+      });
+    } catch (e) {
+      toast.error("Erro ao deletar a palavra, tente novamente ! ", {
+        position: "bottom-center",
+      });
+    }
+  };
+
+  const handleOpenModal = (wordId: string) => {
+    if (window) {
+      const modal: any = document.getElementById("my_modal_1");
+      modal?.showModal();
+      setWordId(wordId);
+    }
+  };
 
   return (
     <div className="w-full relative">
@@ -40,10 +67,12 @@ export default function WordListScreen() {
           <WordList
             translateWord={item}
             key={item.id}
-            handleDelete={() => console.log(item.id)}
+            handleDelete={() => handleOpenModal(item.id)}
           />
         ))}
       </div>
+
+      <Modal onConfirm={handleDeleteWord} />
     </div>
   );
 }

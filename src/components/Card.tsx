@@ -1,28 +1,18 @@
 "use client";
 import { TranslateWord } from "@prisma/client";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import Modal from "./Modal";
 
 interface CardProps {
   item: TranslateWord;
-  handleDelete: (value: string) => void;
+  handleDelete: () => void;
 }
 
 function Card({ item, handleDelete }: CardProps) {
   const [showWord, setShowWord] = useState(false);
   const maskWord = item?.translation?.replace(/./g, "*");
-  const router = useRouter();
-
-  const handleOpenModal = () => {
-    if (window) {
-      const modal: any = document.getElementById("my_modal_1");
-      modal?.showModal();
-    }
-  };
 
   return (
     <div className="flex w-full">
@@ -57,14 +47,12 @@ function Card({ item, handleDelete }: CardProps) {
           </button>
 
           <div className="flex gap-2">
-            <button onClick={handleOpenModal}>
+            <button onClick={handleDelete}>
               <RiDeleteBin6Line className="text-red-300 text-2xl hover:opacity-80 transition-all" />
             </button>
           </div>
         </div>
       </div>
-
-      <Modal onConfirm={() => handleDelete(item.id)} />
     </div>
   );
 }
