@@ -4,7 +4,7 @@ import Card from "@/components/Card";
 import { pronounceWord } from "@/lib/pronounceWord";
 import { TranslateWord } from "@prisma/client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   AiOutlineArrowLeft,
   AiOutlineArrowRight,
@@ -14,19 +14,53 @@ import { BsFillVolumeUpFill } from "react-icons/bs";
 
 export default function Home() {
   const [wordsList, setWordList] = useState<TranslateWord[] | undefined>();
+  const [indexWord, setIndexWord] = useState(0);
   const [automaticChange, setAutomaticChange] = useState(false);
+  const interval = 1000 * 30; //30seg
+
+  const hasWordList = wordsList && wordsList?.length > 0;
+  const totalWords = wordsList && wordsList.length;
+
+  const handleNextIndex = useCallback(() => {
+    if (wordsList && indexWord === wordsList?.length - 1) {
+      return setIndexWord(0);
+    }
+    setIndexWord(indexWord + 1);
+  }, [indexWord, wordsList]);
+
+  const handlePrevIndex = () => {
+    if (wordsList && indexWord === 0) {
+      return setIndexWord(wordsList?.length - 1);
+    }
+    setIndexWord(indexWord - 1);
+  };
 
   useEffect(() => {
     async function fetchWords() {
       const list = await fetch("api/translation").then((res) => res.json());
-
       setWordList(list);
     }
 
     fetchWords();
   }, []);
 
-  const hasWordList = wordsList && wordsList?.length > 0;
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+
+    const handleAutomaticWord = () => {
+      if (automaticChange) {
+        intervalId = setInterval(() => {
+          handleNextIndex();
+        }, interval);
+      }
+    };
+
+    handleAutomaticWord();
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [automaticChange, handleNextIndex, interval]);
 
   return (
     <div className="flex flex-col h-[82%] justify-between">
@@ -39,7 +73,7 @@ export default function Home() {
         </Link>
         {hasWordList ? (
           <div className="mt-8">
-            <Card item={wordsList[0]} />
+            <Card item={wordsList[indexWord]} />
 
             <div className="flex items-center justify-between mt-4">
               <div className="flex items-center gap-2">
@@ -65,20 +99,21 @@ export default function Home() {
       {hasWordList && (
         <div>
           <div className="flex gap-1 text-white w-full justify-center mb-4 items-center">
-            <p className="text-lg">1</p>/<p className="text-lg">6</p>
+            <p className="text-lg">{indexWord + 1}</p>/
+            <p className="text-lg">{totalWords}</p>
           </div>
 
           <div className="flex gap-2 w-full justify-between ">
-            <button>
+            <button onClick={handlePrevIndex}>
               <AiOutlineArrowLeft className="text-slate-50 text-2xl hover:opacity-80 transition-all" />
             </button>
 
-            <Link href="/new-word">
+            <Link href="/form-word" className="flex items-end">
               <button>
                 <AiOutlinePlus className="text-slate-50 text-2xl hover:opacity-80 transition-all" />
               </button>
             </Link>
-            <button>
+            <button onClick={handleNextIndex}>
               <AiOutlineArrowRight className="text-slate-50 text-2xl hover:opacity-80 transition-all" />
             </button>
           </div>
