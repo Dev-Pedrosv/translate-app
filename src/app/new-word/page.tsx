@@ -21,10 +21,17 @@ export default function NewWord() {
     formState: { errors },
     watch,
     control,
+    setValue,
   } = useForm<TranslateWord>();
 
   const handleCloseForm = () => {
     router.push("/word-list");
+  };
+
+  const resetForm = () => {
+    setValue("imageUrl", "");
+    setValue("word", "");
+    setValue("translation", "");
   };
 
   const onSubmit = async (data: TranslateWord) => {
@@ -36,7 +43,7 @@ export default function NewWord() {
         position: "bottom-center",
       });
 
-      handleCloseForm();
+      resetForm();
     } catch (err) {
       toast.error("Erro ao cadastrar uma nova palavra", {
         position: "bottom-center",
