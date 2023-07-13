@@ -1,8 +1,11 @@
-import Header from "@/components/Header";
 import "./globals.css";
 import { Poppins } from "next/font/google";
 import { NextAuthProvider } from "./providers/auth";
 import ToastProvider from "./providers/toast";
+
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
+
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
@@ -27,6 +30,7 @@ export default function RootLayout({
               <div className="max-w-[375px] w-full h-screen">
                 <Header />
                 {children}
+                <Footer />
               </div>
             </main>
           </ToastProvider>

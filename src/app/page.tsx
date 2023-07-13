@@ -107,7 +107,7 @@ export default function Home() {
   };
 
   return (
-    <div className="flex flex-col h-[82%] justify-between">
+    <div className="flex flex-col justify-between">
       <div>
         <Link
           href="/word-list"
@@ -152,9 +152,9 @@ export default function Home() {
           ))}
       </div>
 
-      {hasWordList && (
+      {!isLoading && hasWordList && (
         <div>
-          <div className="flex gap-1 text-white w-full justify-center mb-4 items-center">
+          <div className="flex gap-1 text-white w-full justify-center mb-4 items-center mt-20">
             <p className="text-lg">{indexWord + 1}</p>/
             <p className="text-lg">{totalWords}</p>
           </div>
