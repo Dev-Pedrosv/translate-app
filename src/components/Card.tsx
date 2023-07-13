@@ -19,13 +19,15 @@ function Card({ item, handleDelete }: CardProps) {
       <div className="bg-gray-800 w-full flex flex-col items-center p-4 rounded-xl gap-4 justify-between h-[360px]">
         <div>
           {item?.imageUrl && (
-            <Image
-              width={220}
-              height={220}
-              alt={item.word}
-              src={item.imageUrl}
-              className="rounded-xl"
-            />
+            <div className="w-[220px] h-[220px] relative">
+              <Image
+                alt={item.word}
+                src={item.imageUrl}
+                className="rounded-xl"
+                fill
+                style={{ objectFit: "cover" }}
+              />
+            </div>
           )}
           <div className="mt-4">
             <p className="text-center text-slate-50 text-lg font-semibold">
