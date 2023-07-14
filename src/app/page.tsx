@@ -134,7 +134,7 @@ export default function Home() {
                   <label>Troca automática: 30s</label>
                 </div>
 
-                <button onClick={() => pronounceWord(wordsList[0].word)}>
+                <button onClick={() => pronounceWord(wordsList[indexWord].word)}>
                   <BsFillVolumeUpFill className="text-slate-50 text-2xl hover:opacity-80 transition-all" />
                 </button>
               </div>
