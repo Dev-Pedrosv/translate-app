@@ -17,7 +17,7 @@ function Footer() {
         </Link>
       </div>
 
-      <p className="text-sm mt-4 text-center">Desenvolvido por Pedro Silva</p>
+      <p className="text-sm mt-4 text-center">Developed by Pedro Silva</p>
     </div>
   );
 }

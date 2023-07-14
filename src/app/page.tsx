@@ -50,7 +50,7 @@ export default function Home() {
       const list = await getWords();
       setWordList(list);
     } catch (err) {
-      toast.error("Erro ao carregar a lista de palavras, tente novamente!", {
+      toast.error("Error loading wordlist, please try again!", {
         position: "bottom-center",
       });
     } finally {
@@ -85,13 +85,14 @@ export default function Home() {
       if (wordsList) {
         setIsLoading(true);
         await deleteWord(wordsList[indexWord].id);
-        fetchWords();
-        toast.success("Card deletada com sucesso !", {
+        const updateWordList = wordsList.filter((word) => word.id !== wordsList[indexWord].id)
+        setWordList(updateWordList)
+        toast.success("Card deleted successfully!", {
           position: "bottom-center",
         });
       }
     } catch (e) {
-      toast.error("Erro ao deletar o Card, tente novamente ! ", {
+      toast.error("Error deleting card, try again!", {
         position: "bottom-center",
       });
     } finally {
@@ -131,7 +132,7 @@ export default function Home() {
                     checked={automaticChange}
                     onChange={() => setAutomaticChange(!automaticChange)}
                   />
-                  <label>Troca automática: 30s</label>
+                  <label>Automatic exchange: 30s</label>
                 </div>
 
                 <button onClick={() => pronounceWord(wordsList[indexWord].word)}>
@@ -141,11 +142,11 @@ export default function Home() {
             </div>
           ) : (
             <>
-              <p className="text-center mt-20">Sem palavras cadastradas </p>
+              <p className="text-center mt-20">No registered words</p>
               <Link href="/new-word" className="flex items-end">
                 <Button className="gap-2">
                   <AiOutlinePlus className="text-slate-50 text-2xl hover:opacity-80 transition-all" />
-                  Cadastrar nova palavra
+                  Register new word
                 </Button>
               </Link>
             </>

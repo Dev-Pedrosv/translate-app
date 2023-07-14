@@ -41,13 +41,13 @@ export default function NewWord() {
       setIsLoading(true);
 
       await createWord(data);
-      toast.success("Nova palavra cadastrada com sucesso!", {
+      toast.success("New word successfully registered", {
         position: "bottom-center",
       });
 
       resetForm();
     } catch (err) {
-      toast.error("Erro ao cadastrar uma nova palavra", {
+      toast.error("Error when registering a new word", {
         position: "bottom-center",
       });
     } finally {
@@ -77,7 +77,7 @@ export default function NewWord() {
             rules={{
               required: {
                 value: true,
-                message: "Word é obrigatório.",
+                message: "Word is required.",
               },
             }}
             control={control}
@@ -97,7 +97,7 @@ export default function NewWord() {
             rules={{
               required: {
                 value: true,
-                message: "Translation é obrigatório.",
+                message: "Translation is required.",
               },
             }}
             control={control}
@@ -136,7 +136,7 @@ export default function NewWord() {
             />
           )}
 
-          <Button isLoading={isLoading}>Cadastrar</Button>
+          <Button isLoading={isLoading}>Register</Button>
         </div>
       </form>
     </>

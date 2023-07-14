@@ -27,8 +27,8 @@ function Login() {
     <div className="flex flex-1 flex-col items-center justify-center h-full p-5">
       <p className="text-white text-center">
         {status === "loading"
-          ? "Efetuando login..."
-          : "Efetue login para acessar sua lista de palavras"}
+          ? "Logging in..."
+          : "Log in to access your word list"}
       </p>
 
       <Button
@@ -41,7 +41,7 @@ function Login() {
         ) : (
           <>
             <BsGoogle />
-            Login com Google
+            Login with Google
           </>
         )}
       </Button>
