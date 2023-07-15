@@ -19,7 +19,7 @@ function Header() {
   }, [data, router, status, pathname]);
 
   return (
-    <div className="flex justify-between border-b border-slate-400 pb-4 mb-10">
+    <div className="flex justify-between border-b border-slate-400 pb-4 h-12">
       <Link href="/">
         <h1 className="text-white text-2xl font-bold">Translate</h1>
       </Link>

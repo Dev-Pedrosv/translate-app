@@ -4,7 +4,7 @@ import { FiInstagram, FiLinkedin, FiYoutube } from "react-icons/fi";
 
 function Footer() {
   return (
-    <div className="mt-10  text-2xl absolute bottom-10 w-full left-0">
+    <div className="text-2xl w-full gap-3 flex flex-col ">
       <div className="flex items-center justify-center gap-3">
         <Link href="https://www.instagram.com/pedrosilvadev_/" target="_blank">
           <FiInstagram className="hover:-mt-2 transition-all" />
@@ -17,7 +17,7 @@ function Footer() {
         </Link>
       </div>
 
-      <p className="text-sm mt-4 text-center">Developed by Pedro Silva</p>
+      <p className="text-sm text-center">Developed by Pedro Silva</p>
     </div>
   );
 }

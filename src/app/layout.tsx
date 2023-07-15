@@ -26,10 +26,10 @@ export default function RootLayout({
       <body className={poppins.className}>
         <NextAuthProvider>
           <ToastProvider>
-            <main className="bg-bgColor w-full h-screen overflow-hidden flex justify-center p-4">
-              <div className="max-w-[375px] w-full h-screen">
+            <main className="bg-bgColor w-full flex justify-center ">
+              <div className="max-w-[375px] w-full min-h-screen flex flex-col gap-4 justify-between p-4">
                 <Header />
-                {children}
+                <div className="flex flex-col h-full">{children}</div>
                 <Footer />
               </div>
             </main>
