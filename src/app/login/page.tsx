@@ -14,7 +14,7 @@ function Login() {
 
   const handleLoginClick = () => {
     setIsLoading(true);
-    signIn();
+    signIn("google");
   };
 
   useEffect(() => {
